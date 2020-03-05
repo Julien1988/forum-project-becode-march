@@ -20,7 +20,7 @@ class DatabaseManager {
     protected function __construct()
     {
         try {
-            $db = new PDO("mysql:dbname=" . $this::DB_NAME . ";host=" . $this::HOST, $this::USER, $this::PWD);
+            $db = new PDO("mysql:dbname=" . $this::DB_NAME . ";host=" . $this::HOST, $this::USER, $this::PWD,array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8mb4"));
         } catch (\Throwable $th) {
             echo 'Connection to database failed : ' . $th->getMessage();
         }

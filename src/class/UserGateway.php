@@ -32,9 +32,18 @@ class UserGateway
         }
     }
 
-    public function insert()
+    public function insert($name,$pwd,$email)
     {
-        $statement = 'INSERT INTO User ';
+        $statement = 'INSERT INTO users (name, password, email) VALUES (?, ?, ?)';
+
+        try {
+            $db = DatabaseManager::getInstance()->getDatabase();
+            $sth = $db->prepare($statement);
+            $sth->execute([$name,$pwd,$email]);
+            echo $db->lastInsertId();
+        } catch (\PDOException $th) {
+            echo ($th->getMessage());
+        }
     }
 
     public function getPwdFrom($email)
@@ -44,8 +53,8 @@ class UserGateway
             $db = DatabaseManager::getInstance()->getDatabase();
             $sth = $db->prepare($statement);
             $sth->execute([$email]);
-            $userEmail = $sth->fetch()['password'];
-            print_r($userEmail);
+            $userPWD = $sth->fetch()['password'];
+            return $userPWD;
         } catch (\PDOException $th) {
             echo ($th->getMessage());
         }
